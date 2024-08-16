@@ -579,8 +579,12 @@ class ClouDNSProvider(BaseProvider):
     def records_are_same(self, existing):
         zone = existing.zone
         record_ids = []
+        if hasattr(existing, 'values'):
+            values_to_check = existing.values
+        else:
+            values_to_check = [existing.value]
         for record_id, record in self.zone_records(zone).items():
-            for value in existing.values:
+            for value in values_to_check:
                 if existing._type == 'NAPTR' and record['type'] == 'NAPTR':                    
                     if (
                         existing.name == record['host']
